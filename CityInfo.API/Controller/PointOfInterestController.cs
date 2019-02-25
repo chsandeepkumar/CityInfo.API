@@ -27,7 +27,7 @@ namespace CityInfo.API.Controller
             return Ok(pointIfInterest);
         }
         [HttpPost("{cityId}/pointofinterest")]
-        public IActionResult CreatePointOfInterest(int cityId, [FromBody] PointOfInterest pointOfInterest)
+        public IActionResult CreatePointOfInterest(int cityId, [FromBody] PointOfInterestModel pointOfInterest)
         {
             if (pointOfInterest == null) return BadRequest();
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -45,7 +45,7 @@ namespace CityInfo.API.Controller
         }
 
         [HttpPut("{cityId}/pointofInterest/{id}")]
-        public IActionResult UpdatePointOfInterest(int cityId, int id, [FromBody] PointOfInterest pointOfInterest)
+        public IActionResult UpdatePointOfInterest(int cityId, int id, [FromBody] PointOfInterestModel pointOfInterest)
         {
             if (pointOfInterest == null) return BadRequest();
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -63,7 +63,7 @@ namespace CityInfo.API.Controller
 
         [HttpPatch("{cityId}/pointofInterest/{id}")]
         public IActionResult UpdatePointOfInterestPartially(int cityId, int id,
-            [FromBody] JsonPatchDocument<PointOfInterest> pointofInterestPatchDocument)
+            [FromBody] JsonPatchDocument<PointOfInterestModel> pointofInterestPatchDocument)
         {
             if (pointofInterestPatchDocument == null) return BadRequest();
             var city = CityDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
@@ -71,7 +71,7 @@ namespace CityInfo.API.Controller
 
             var pointOfInterestFromStore = city.PointofInterest.FirstOrDefault(p => p.Id == id);
             if (pointOfInterestFromStore == null) return NotFound();
-            var pointOfInterestToPatch = new PointOfInterest
+            var pointOfInterestToPatch = new PointOfInterestModel
             {
                 Name = pointOfInterestFromStore.Name,
                 Description = pointOfInterestFromStore.Description
