@@ -2,7 +2,7 @@
 
 namespace CityInfo.API.Model
 {
-    public class PointOfInterest
+    public class PointOfInterestModel
     {
         [Required(ErrorMessage = "Provide a Name filed value")]
         [MaxLength(50)]

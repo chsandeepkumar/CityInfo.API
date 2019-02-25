@@ -1,7 +1,11 @@
 ﻿using System;
+using CityInfo.API.DBContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 
@@ -9,6 +13,18 @@ namespace CityInfo_API
 {
     public class Startup
     {
+        public static IConfigurationRoot Configuration;
+
+        public Startup(IHostingEnvironment hostingEnvironment)
+        {
+            var builder =
+                new ConfigurationBuilder()
+                    .SetBasePath(hostingEnvironment.ContentRootPath)
+                    .AddJsonFile("appSettings.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile($"appSettings.{hostingEnvironment.EnvironmentName}.json", optional: true,
+                        reloadOnChange: true);
+            Configuration = builder.Build();
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -26,16 +42,17 @@ namespace CityInfo_API
             //            break;
             //    }
             //});
+            services.AddDbContext<CityInfoContext>(context=>context.UseSqlServer(Configuration["connectionStrings:cityInfoDBConnectionString"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,CityInfoContext cityInfoContext)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            cityInfoContext.EnsureSeedDataForContext();
             app.UseStatusCodePages();
             app.UseMvc();
           
