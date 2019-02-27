@@ -12,4 +12,11 @@ namespace CityInfo.API.Model
         public int NumberOfPointInterest => PointofInterest.Count;
         public ICollection<PointOfInterestDto> PointofInterest { get; set; }=new List<PointOfInterestDto>();
     }
+
+    public class CityDetails
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
 }
