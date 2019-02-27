@@ -1,5 +1,6 @@
 ﻿using System;
 using CityInfo.API.DBContext;
+using CityInfo.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -43,6 +44,7 @@ namespace CityInfo_API
             //    }
             //});
             services.AddDbContext<CityInfoContext>(context=>context.UseSqlServer(Configuration["connectionStrings:cityInfoDBConnectionString"]));
+            services.AddScoped<ICityInfoRepository, CityInfoRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
